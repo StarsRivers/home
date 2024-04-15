@@ -2,9 +2,9 @@
   <div :class="store.backgroundShow ? 'cover show' : 'cover'">
     <img
       v-show="store.imgLoadStatus"
+      :src="bgUrl"
       class="bg"
       alt="cover"
-      :src="bgUrl"
       @load="imgLoadComplete"
       @error.once="imgLoadError"
       @animationend="imgAnimationEnd"
@@ -34,7 +34,7 @@ const emit = defineEmits(["loadComplete"]);
 
 // 壁纸随机数
 // 请依据文件夹内的图片个数修改 Math.random() 后面的第一个数字
-const bgRandom = Math.floor(Math.random() * 12 + 1);
+const bgRandom = Math.floor(Math.random() * 10 + 1);
 
 // 更换壁纸链接
 const changeBg = (type) => {
@@ -79,6 +79,14 @@ const imgLoadError = () => {
   bgUrl.value = `/images/background${bgRandom}.jpg`;
 };
 
+// 监听壁纸切换
+watch(
+  () => store.coverType,
+  (value) => {
+    changeBg(value);
+  },
+);
+
 onMounted(() => {
   // 加载壁纸
   changeBg(store.coverType);
@@ -115,7 +123,7 @@ onBeforeUnmount(() => {
     transition:
       filter 0.3s,
       transform 0.3s;
-    animation: fade-blur-in 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation: fade-blur-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     animation-delay: 0.45s;
   }
   .gray {
